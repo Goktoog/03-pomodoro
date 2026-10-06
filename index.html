@@ -8,25 +8,60 @@
 </head>
 
 <body>
+    <header>
+        <button id="themeButton" class="theme-switch" type="button" aria-label="Tema değiştir">
+            <span class="theme-switch__icon theme-switch__icon--sun" aria-hidden="true">☀</span>
+            <span class="theme-switch__thumb" aria-hidden="true"></span>
+            <span class="theme-switch__icon theme-switch__icon--moon" aria-hidden="true">☾</span>
+        </button>
+    </header>
     <h1>Pomodoro Timer</h1>
+    <h1 id="timer" class="timer">25:00</h1>
     <div>
-        <button id="startButton">Başlat</button>
+        <p id="totalFocusTime">Toplam odaklanma süresi: 0 dk</p>
+        <div>
+            <p id="todayDate">Bugün: 01/01/0000</p>
+        </div>
     </div>
 
+    <button id="startButton">Başlat</button>
+
     <table>
-        <tr>
-            <td>Çalışma Süresi (dakika):</td>
-            <td><input type="number" id="workDuration" value="25"></td>
-        </tr>
-        <tr>
-            <td>Mola Süresi (dakika):</td>
-            <td><input type="number" id="breakDuration" value="5"></td>
-        </tr>
-        <tr>
-            <td>Uzun Mola:</td>
-            <td><input type="number" id="totalPomodoros" value="30"></td>
-        </tr>
+        <ul>
+            <button id="focusButton">Odaklanma oturumu
+                <br>
+                <p id="focusTime">25 dk</p>
+            </button>
+        </ul>
+
+        <ul>
+            <button id="shortBreakButton">Kısa mola
+                <br>
+                <p id="shortBreakTime">5 dk</p>
+            </button>
+        </ul>
+
+        <ul>
+            <button id="longBreakButton">Uzun mola
+                <br>
+                <p id="longBreakTime">25 dk</p>
+            </button>
+        </ul>
+
     </table>
+
+    <!-- streak alanı yapılacka ve streak yazılacak-->
+    <div>
+        <p id="streak">Streak: 0</p>
+    </div>
+    <!-- Bugün yapılan seanslar -->
+    <div>
+        <p id="todaySessions">Bugün yapılan seanslar: 0</p>
+    </div>
+
+
+    <footer>
+        <p>© 2024 Pomodoro Timer. Tüm hakları saklıdır.</p>
 </body>
 
 </html>
