@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&display=swap');
+
+/* ==========================================================================
+   1. TEMA DEĞİŞKENLERİ
+   ========================================================================== */
+
+/* 🌙 KOYU TEMA: siyah ve sarı */
+:root,
+[data-theme="dark"] {
+    --bg-main: #0a0a0a;
+    --panel-bg: #141416;
+    --panel-border: #27272a;
+
+    --text-main: #f4f4f5;
+    --text-muted: #a1a1aa;
+
+    --accent: #d9f111;
+    /* Fosforlu Sarı */
+    --accent-hover: #c4dc0e;
+    --timer-color: #d9f111;
+
+    --btn-sec-bg: #27272a;
+    --btn-sec-text: #f4f4f5;
+
+    --font-ui: 'Inter', sans-serif;
+    --font-timer: 'JetBrains Mono', monospace;
+}
+
+/* ☀️ BEYAZ & TURUNCU TEMA */
+[data-theme="light"] {
+    --bg-main: #ffffff;
+    --panel-bg: #f4f4f5;
+    --panel-border: #e4e4e7;
+
+    --text-main: #09090b;
+    --text-muted: #71717a;
+
+    --accent: #f97316;
+    /* Canlı Turuncu */
+    --accent-hover: #ea580c;
+    --timer-color: #f97316;
+
+    --btn-sec-bg: #e4e4e7;
+    --btn-sec-text: #09090b;
+
+    --font-ui: 'Inter', sans-serif;
+    --font-timer: 'JetBrains Mono', monospace;
+}
+
+/* ==========================================================================
+   2. TEMEL VE SAYFA DÜZENİ
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-ui);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 1.5rem;
+}
+
+/* Header */
+.app-header {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 2rem auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.app-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+}
+
+/* Switcher Butonu */
+.theme-switch {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    padding: 6px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-main);
+}
+
+.theme-switch:hover {
+    border-color: var(--accent);
+}
+
+.theme-switch__icon {
+    font-size: 0.9rem;
+    opacity: 0.4;
+}
+
+.theme-switch__icon.active {
+    opacity: 1;
+    color: var(--accent);
+}
+
+.theme-switch__thumb {
+    width: 1px;
+    height: 12px;
+    background-color: var(--panel-border);
+}
+
+/* ==========================================================================
+   3. ANA PANEL (LEFT & RIGHT PANEL DÜZENİ)
+   ========================================================================== */
+.app-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* SOL KOLON: SAYAÇ VE KONTROLLER */
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.timer-display-container {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 3.5rem 1rem;
+    text-align: center;
+}
+
+.timer {
+    font-family: var(--font-timer);
+    font-size: 7rem;
+    font-weight: 700;
+    color: var(--timer-color);
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.75rem;
+}
+
+.btn {
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    color: #000000;
+}
+
+[data-theme="light"] .btn-primary {
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-secondary {
+    background-color: var(--btn-sec-bg);
+    color: var(--btn-sec-text);
+    border: 1px solid var(--panel-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--text-muted);
+}
+
+/* SAĞ KOLON: MODLAR VE İSTATİSTİK */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.mode-switch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.mode-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 0.5rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.mode-card:has(.mode-btn.active) {
+    border-color: var(--accent);
+}
+
+.mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.mode-btn.active {
+    color: var(--accent);
+}
+
+.mode-time {
+    font-family: var(--font-timer);
+    font-size: 0.85rem;
+    background: var(--bg-main);
+    color: var(--text-main);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--panel-border);
+}
+
+.mode-adjuster {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.adjust-btn {
+    background: var(--bg-main);
+    border: 1px solid var(--panel-border);
+    color: var(--text-main);
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adjust-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* İSTATİSTİKLER VE TARİH */
+.stats-section {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.date-navigator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 0.75rem;
+}
+
+.current-date-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.nav-arrow-btn {
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.nav-arrow-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.stat-card {
+    background: var(--bg-main);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 0.85rem 0.4rem;
+    text-align: center;
+}
+
+.stat-value {
+    font-family: var(--font-timer);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   4. FOOTER
+   ========================================================================== */
+.site-footer {
+    width: 100%;
+    max-width: 1100px;
+    margin: 2.5rem auto 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--panel-border);
+    padding-top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 0.85rem;
+}
+
+.social-btn {
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.social-btn:hover {
+    color: var(--accent);
+}
+
+/* MOBİL VE KÜÇÜK EKRAN UYUMU */
+@media (max-width: 850px) {
+    body {
+        padding: 1rem;
+    }
+
+    .app-container {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .timer {
+        font-size: 4.5rem;
+    }
+
+    .site-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+}

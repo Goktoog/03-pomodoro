@@ -24,65 +24,85 @@
     <!-- Ana Konteyner -->
     <main class="app-container">
 
-        <!-- 1. Sayaç Ekranı (Varsayılan 30:00) -->
-        <div class="timer-display-container">
-            <h2 id="timer" class="timer">30:00</h2>
-        </div>
-
-        <!-- 2. Kontrol Butonları (Hemen Sürenin Altında) -->
-        <div class="controls">
-            <button id="startButton" class="btn btn-primary" type="button">Başlat</button>
-            <button id="resetButton" class="btn btn-secondary" type="button">Sıfırla</button>
-        </div>
-
-        <!-- 3. Mod Seçenekleri (Kontrollerin Altında) -->
-        <div class="mode-switch">
-            <button id="focusButton" class="mode-btn active" type="button">
-                Odaklanma
-                <span id="focusTime" class="mode-time">30 dk</span>
-            </button>
-            <button id="shortBreakButton" class="mode-btn" type="button">
-                Kısa Mola
-                <span id="shortBreakTime" class="mode-time">5 dk</span>
-            </button>
-            <button id="longBreakButton" class="mode-btn" type="button">
-                Uzun Mola
-                <span id="longBreakTime" class="mode-time">20 dk</span>
-            </button>
-        </div>
-
-        <!-- 4. İstatistikler ve Geçmiş Gün Gezgini -->
-        <section class="stats-section">
-            <div class="date-navigator">
-                <button id="prevDayBtn" class="nav-arrow-btn" title="Önceki Gün" type="button">◄</button>
-                <span id="todayDate" class="current-date-text">Bugün: 06.10.2026</span>
-                <button id="nextDayBtn" class="nav-arrow-btn" title="Sonraki Gün" type="button" disabled>►</button>
+        <!-- Sol Kolon: Sayaç ve Kontroller -->
+        <div class="left-panel">
+            <div class="timer-display-container">
+                <h2 id="timer" class="timer">30:00</h2>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <p id="streak" class="stat-value">🔥 0</p>
-                    <span class="stat-label">Session Streak</span>
+            <div class="controls">
+                <button id="startButton" class="btn btn-primary" type="button">Başlat</button>
+                <button id="resetButton" class="btn btn-secondary" type="button">Sıfırla</button>
+            </div>
+        </div>
+
+        <!-- Sağ Kolon: Modlar ve İstatistikler -->
+        <div class="right-panel">
+            <div class="mode-switch">
+                <div class="mode-card">
+                    <button id="focusButton" class="mode-btn active" type="button">
+                        Odaklanma
+                        <span id="focusTime" class="mode-time">30 dk</span>
+                    </button>
+                    <div class="mode-adjuster">
+                        <button id="focusDec" class="adjust-btn" type="button" title="5 dk azalt">-</button>
+                        <button id="focusInc" class="adjust-btn" type="button" title="5 dk arttır">+</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <p id="todaySessions" class="stat-value">0</p>
-                    <span class="stat-label">Bugün Yapılan Seanslar</span>
+
+                <div class="mode-card">
+                    <button id="shortBreakButton" class="mode-btn" type="button">
+                        Kısa Mola
+                        <span id="shortBreakTime" class="mode-time">5 dk</span>
+                    </button>
+                    <div class="mode-adjuster">
+                        <button id="shortBreakDec" class="adjust-btn" type="button" title="5 dk azalt">-</button>
+                        <button id="shortBreakInc" class="adjust-btn" type="button" title="5 dk arttır">+</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <p id="totalFocusTime" class="stat-value">0 dk</p>
-                    <span class="stat-label">Toplam Odaklanma</span>
+
+                <div class="mode-card">
+                    <button id="longBreakButton" class="mode-btn" type="button">
+                        Uzun Mola
+                        <span id="longBreakTime" class="mode-time">20 dk</span>
+                    </button>
+                    <div class="mode-adjuster">
+                        <button id="longBreakDec" class="adjust-btn" type="button" title="5 dk azalt">-</button>
+                        <button id="longBreakInc" class="adjust-btn" type="button" title="5 dk arttır">+</button>
+                    </div>
                 </div>
             </div>
-        </section>
+
+            <section class="stats-section">
+                <div class="date-navigator">
+                    <button id="prevDayBtn" class="nav-arrow-btn" title="Önceki Gün" type="button">◄</button>
+                    <span id="todayDate" class="current-date-text">Bugün: 08.10.2026</span>
+                    <button id="nextDayBtn" class="nav-arrow-btn" title="Sonraki Gün" type="button" disabled>►</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p id="streak" class="stat-value">🔥 0</p>
+                        <span class="stat-label">Session Streak</span>
+                    </div>
+                    <div class="stat-card">
+                        <p id="todaySessions" class="stat-value">0</p>
+                        <span class="stat-label">Bugün Yapılan Seanslar</span>
+                    </div>
+                    <div class="stat-card">
+                        <p id="totalFocusTime" class="stat-value">0 dk</p>
+                        <span class="stat-label">Toplam Odaklanma</span>
+                    </div>
+                </div>
+            </section>
+        </div>
 
     </main>
 
     <!-- Footer -->
     <footer class="site-footer">
         <p>© 2026 Pomodoro Timer.</p>
-        <div class="footer-divider"></div>
         <div class="footer-links">
-            <!-- Github -->
             <a href="https://github.com/Goktoog/" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
                 class="social-btn">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
@@ -90,8 +110,6 @@
                         d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                 </svg>
             </a>
-
-            <!-- Linkedin -->
             <a href="https://www.linkedin.com/in/goktugodemis" target="_blank" rel="noopener noreferrer"
                 aria-label="LinkedIn" class="social-btn">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
