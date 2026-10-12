@@ -1,7 +1,3 @@
-/**
- * app.js - Ana Uygulama ve Mantık Katmanı
- */
-
 import {
     getSavedTheme,
     saveTheme,
@@ -53,8 +49,6 @@ const streakEl = document.getElementById('streak');
 const todaySessionsEl = document.getElementById('todaySessions');
 const totalFocusTimeEl = document.getElementById('totalFocusTime');
 
-const alarmSound = document.getElementById('alarmSound');
-
 // Artı / Eksi Butonları
 const focusDec = document.getElementById('focusDec');
 const focusInc = document.getElementById('focusInc');
@@ -64,7 +58,51 @@ const longBreakDec = document.getElementById('longBreakDec');
 const longBreakInc = document.getElementById('longBreakInc');
 
 // ==========================================
-// 3. YARDIMCI FORMAT FONKSİYONLARI
+// 3. SES KONTROLÜ (Web Audio API - Gürültülü Alarm)
+// ==========================================
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
+// 'sawtooth' dalga boyu en keskin ve yüksek sesli dalgadır
+function playTone(freq, duration) {
+    initAudio();
+    if (!audioCtx) return;
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+    // Ses seviyesi (0.4 max sınırlara yakındır, oldukça gürültülüdür)
+    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+
+// Süre bittiğinde çalacak 3'lü güçlü siren
+function playAlarm() {
+    playTone(440, 0.4);
+    setTimeout(() => playTone(440, 0.4), 450);
+    setTimeout(() => playTone(587.33, 0.6), 900);
+}
+
+// ==========================================
+// 4. YARDIMCI FORMAT FONKSİYONLARI
 // ==========================================
 function getFormattedKey(dateObj) {
     const year = dateObj.getFullYear();
@@ -96,7 +134,7 @@ function updateDurationLabels() {
 }
 
 // ==========================================
-// 4. İSTATİSTİK VE GÜNLÜK TAKİP
+// 5. İSTATİSTİK VE GÜNLÜK TAKİP
 // ==========================================
 function renderStats() {
     const key = getFormattedKey(currentDate);
@@ -129,7 +167,7 @@ function completeFocusSession() {
 }
 
 // ==========================================
-// 5. TEMA YÖNETİMİ
+// 6. TEMA YÖNETİMİ
 // ==========================================
 let currentTheme = getSavedTheme();
 
@@ -155,7 +193,7 @@ themeButton.addEventListener('click', () => {
 });
 
 // ==========================================
-// 6. SÜRE DEĞİŞTİRME (+5 / -5 DK)
+// 7. SÜRE DEĞİŞTİRME (+5 / -5 DK)
 // ==========================================
 function adjustDuration(mode, delta) {
     let newVal = durationsInMinutes[mode] + delta;
@@ -181,15 +219,8 @@ longBreakDec.addEventListener('click', () => adjustDuration('longBreak', -5));
 longBreakInc.addEventListener('click', () => adjustDuration('longBreak', 5));
 
 // ==========================================
-// 7. SAYAÇ VE MOD MANTIĞI
+// 8. SAYAÇ VE MOD MANTIĞI
 // ==========================================
-function playAlarm() {
-    if (alarmSound) {
-        alarmSound.currentTime = 0;
-        alarmSound.play().catch(() => { });
-    }
-}
-
 function startTimer() {
     if (isRunning) return;
     isRunning = true;
@@ -268,7 +299,7 @@ nextDayBtn.addEventListener('click', () => {
 });
 
 // ==========================================
-// 8. BAŞLANGIÇ (INIT)
+// 9. BAŞLANGIÇ (INIT)
 // ==========================================
 function init() {
     changeTheme(currentTheme);
