@@ -1,10 +1,18 @@
+/**
+ * app.js - Ana Uygulama ve Mantık Katmanı
+ */
+
 import {
     getSavedTheme,
     saveTheme,
     getSavedDurations,
     saveDurations,
     getDayStats,
-    saveDayStats
+    saveDayStats,
+    getCurrentStreak,
+    saveCurrentStreak,
+    getLastActiveDate,
+    saveLastActiveDate
 } from "./store.js";
 
 // ==========================================
@@ -58,7 +66,7 @@ const longBreakDec = document.getElementById('longBreakDec');
 const longBreakInc = document.getElementById('longBreakInc');
 
 // ==========================================
-// 3. SES KONTROLÜ (Web Audio API - Gürültülü Alarm)
+// 3. SES KONTROLÜ (Web Audio API)
 // ==========================================
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
@@ -72,7 +80,6 @@ function initAudio() {
     }
 }
 
-// 'sawtooth' dalga boyu en keskin ve yüksek sesli dalgadır
 function playTone(freq, duration) {
     initAudio();
     if (!audioCtx) return;
@@ -83,7 +90,6 @@ function playTone(freq, duration) {
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-    // Ses seviyesi (0.4 max sınırlara yakındır, oldukça gürültülüdür)
     gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
@@ -94,7 +100,6 @@ function playTone(freq, duration) {
     osc.stop(audioCtx.currentTime + duration);
 }
 
-// Süre bittiğinde çalacak 3'lü güçlü siren
 function playAlarm() {
     playTone(440, 0.4);
     setTimeout(() => playTone(440, 0.4), 450);
@@ -134,8 +139,16 @@ function updateDurationLabels() {
 }
 
 // ==========================================
-// 5. İSTATİSTİK VE GÜNLÜK TAKİP
+// 5. İSTATİSTİK VE GÜNLÜK SERİ (DAY STREAK)
 // ==========================================
+
+// Dünün tarihini YYYY-MM-DD olarak alma
+function getYesterdayKey() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return getFormattedKey(d);
+}
+
 function renderStats() {
     const key = getFormattedKey(currentDate);
     const todayKey = getFormattedKey(new Date());
@@ -149,18 +162,38 @@ function renderStats() {
         nextDayBtn.disabled = false;
     }
 
-    streakEl.textContent = `🔥 ${stats.streak}`;
+    // Seçilen günün veya genel serinin durumunu gösterme
+    const activeStreak = stats.streak > 0 ? stats.streak : getCurrentStreak();
+    streakEl.textContent = `🔥 ${activeStreak} Gün`;
     todaySessionsEl.textContent = stats.sessions;
     totalFocusTimeEl.textContent = `${stats.focusMinutes} dk`;
 }
 
 function completeFocusSession() {
     const todayKey = getFormattedKey(new Date());
+    const yesterdayKey = getYesterdayKey();
+    const lastActive = getLastActiveDate();
+    let currentStreak = getCurrentStreak();
+
     const stats = getDayStats(todayKey);
+
+    // Günlük seri hesaplama logic'i
+    if (lastActive !== todayKey) {
+        if (lastActive === yesterdayKey) {
+            // Dün çalışılmış, seri devam ediyor!
+            currentStreak += 1;
+        } else {
+            // Arada gün atlanmış veya ilk defa çalışılıyor, seri sıfırlandı
+            currentStreak = 1;
+        }
+
+        saveCurrentStreak(currentStreak);
+        saveLastActiveDate(todayKey);
+    }
 
     stats.sessions += 1;
     stats.focusMinutes += durationsInMinutes.focus;
-    stats.streak += 1;
+    stats.streak = currentStreak;
 
     saveDayStats(todayKey, stats);
     renderStats();
@@ -197,7 +230,7 @@ themeButton.addEventListener('click', () => {
 // ==========================================
 function adjustDuration(mode, delta) {
     let newVal = durationsInMinutes[mode] + delta;
-    if (newVal < 5) newVal = 5; // Minimum 5 dakika
+    if (newVal < 5) newVal = 5;
 
     durationsInMinutes[mode] = newVal;
     MODES[mode] = newVal * 60;
